@@ -95,8 +95,8 @@ fun ReminderEntryScreen(
                     modifier = Modifier
                         .height(60.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Red, // Set the background color
-                        contentColor = Color.White // Set the text color
+                        containerColor = Color.Red,
+                        contentColor = Color.White
                     )
                 ) {
                     Text("Отмена", fontSize = 16.sp)

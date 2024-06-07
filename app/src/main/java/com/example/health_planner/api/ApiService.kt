@@ -5,23 +5,26 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
-    @POST("login") // Replace with your actual login endpoint
+    @POST("sign-in") // Replace with your actual login endpoint
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
-    @POST("register") // Replace with your actual registration endpoint
+    @POST("sign-up") // Replace with your actual registration endpoint
     fun register(@Body request: RegisterRequest): Call<RegisterResponse>
 
-    @GET("users/{id}")
-    fun getUser(@Path("id") userId: Int): Call<User>
+    @GET("reminder/{userId}")
+    fun getReminders(@Path("userId") userId: Int): Call<List<Reminder>>
 
-    @POST("users")
-    fun createUser(@Body user: User): Call<User>
+    @POST("reminder")
+    fun addReminder(@Body request: Reminder): Call<ReminderResponse>
 
-    @GET("reminders")
-    fun getReminders(@Query("user_id") userId: Int): Call<List<Reminder>>
+    @PUT("reminder/{reminderId}")
+    fun updateReminder(@Path("reminderId") reminderId: Int, @Body request: Reminder): Call<ReminderResponse>
 
-    @POST("reminders")
-    fun createReminder(@Body reminder: Reminder): Call<Reminder>
-
+    @DELETE("reminder/{reminderId}")
+    fun deleteReminder(@Path("reminderId") reminderId: Int): Call<ReminderResponse>
     // Add other endpoints as needed
+
+
+    @GET("user/{userId}")
+    fun getUser(@Path("userId") userId: Int): Call<User>
 }
