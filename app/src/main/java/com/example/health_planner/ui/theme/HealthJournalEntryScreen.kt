@@ -1,12 +1,15 @@
 package com.example.health_planner.ui.theme
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.health_planner.models.HealthJournalEntry
 
@@ -30,25 +33,25 @@ fun HealthJournalEntryScreen(
             OutlinedTextField(
                 value = entryDate,
                 onValueChange = { entryDate = it },
-                label = { Text("Entry Date") },
+                label = { Text("Дата записи") },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
                 value = symptoms,
                 onValueChange = { symptoms = it },
-                label = { Text("Symptoms") },
+                label = { Text("Симптомы") },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
                 value = conditionDescription,
                 onValueChange = { conditionDescription = it },
-                label = { Text("Condition Description") },
+                label = { Text("Описания заболевания") },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
                 value = otherNotes,
                 onValueChange = { otherNotes = it },
-                label = { Text("Other Notes") },
+                label = { Text("Комментарии") },
                 modifier = Modifier.fillMaxWidth()
             )
             Row(
@@ -57,8 +60,16 @@ fun HealthJournalEntryScreen(
                     .padding(top = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = { onCancel() }) {
-                    Text("Cancel")
+                Button(
+                    onClick = { onCancel() },
+                    modifier = Modifier
+                        .height(60.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(115, 128, 243), // Set the background color
+                        contentColor = Color.White // Set the text color
+                    )) {
+                    Text("Отмена")
                 }
                 Button(
                     onClick = {
@@ -71,9 +82,16 @@ fun HealthJournalEntryScreen(
                             other_notes = otherNotes
                         )
                         onJournalEntrySaved(entry)
-                    }
+                    },
+                    modifier = Modifier
+                        .height(60.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(115, 128, 243), // Set the background color
+                        contentColor = Color.White // Set the text color
+                    )
                 ) {
-                    Text("Save Entry")
+                    Text("Сохранить")
                 }
             }
         }

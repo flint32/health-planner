@@ -16,12 +16,19 @@ sealed class Screen {
     object AddReminder : Screen()
     object AddHealthJournalEntry : Screen()
     object Register : Screen()
+    object Reminders : Screen()
+    object HealthJournal : Screen()
 }
+
+
 
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val registrationViewModel: RegistrationViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
+    private val remindersViewModel: RemindersViewModel by viewModels()
+    private val healthJournalViewModel: HealthJournalViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,18 +55,39 @@ class MainActivity : ComponentActivity() {
                         onRegistrationSuccess = { currentScreen = Screen.Login }
                     )
                     is Screen.Main -> MainScreen(
-                        onShowReminders = { /* Implement show reminders */ },
+                        onShowReminders = { currentScreen = Screen.Reminders },
                         onShowHealthJournal = { /* Implement show health journal */ },
                         onAddReminder = { currentScreen = Screen.AddReminder },
                         onAddHealthJournalEntry = { currentScreen = Screen.AddHealthJournalEntry }
                     )
+                    is Screen.Reminders -> ReminderListScreen(
+                        viewModel = remindersViewModel,
+                        userId = 1, // Replace with the actual user ID
+                        onAddReminder = { currentScreen = Screen.AddReminder },
+                        onEditReminder = { reminder ->
+                            // Navigate to the edit reminder screen (not implemented in this snippet)
+                        },
+                        onDeleteReminder = { reminder ->
+                            remindersViewModel.deleteReminder(reminder.reminder_id, 1)
+                        }
+                    )
                     is Screen.AddReminder -> ReminderEntryScreen(
                         onReminderSaved = { reminder ->
-                            // Save reminder and navigate back to main screen
-//                            mainViewModel.saveReminder(reminder)
-                            currentScreen = Screen.Main
+                            remindersViewModel.addReminder(reminder)
+                            currentScreen = Screen.Reminders
                         },
-                        onCancel = { currentScreen = Screen.Main }
+                        onCancel = { currentScreen = Screen.Reminders }
+                    )
+                    is Screen.HealthJournal -> HealthJournalListScreen(
+                        viewModel = healthJournalViewModel,
+                        userId = 1, // Replace with the actual user ID
+                        onAddEntry = { currentScreen = Screen.AddHealthJournalEntry },
+                        onEditEntry = { entry ->
+                            // Navigate to the edit entry screen (not implemented in this snippet)
+                        },
+                        onDeleteEntry = { entry ->
+                            // Implement delete entry logic
+                        }
                     )
                     is Screen.AddHealthJournalEntry -> HealthJournalEntryScreen(
                         onJournalEntrySaved = { entry ->
@@ -74,5 +102,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 

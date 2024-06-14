@@ -22,7 +22,7 @@ class LoginViewModel : ViewModel() {
             val request = LoginRequest(email, password)
             RetrofitClient.instance.login(request).enqueue(object : Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                    if (response.isSuccessful && response.body()?.success == true) {
+                    if (response.isSuccessful) {
                         _loginSuccess.postValue(true)
                     } else {
                         _loginSuccess.postValue(false)

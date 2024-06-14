@@ -20,9 +20,9 @@ class RemindersViewModel : ViewModel() {
     private val _reminderAddResult = MutableLiveData<Result<Boolean>>()
     val reminderAddResult: LiveData<Result<Boolean>> get() = _reminderAddResult
 
-    fun fetchReminders(userId: Int) {
+    fun fetchReminders() {
         viewModelScope.launch {
-            RetrofitClient.instance.getReminders(userId).enqueue(object : Callback<List<Reminder>> {
+            RetrofitClient.instance.getReminders().enqueue(object : Callback<List<Reminder>> {
                 override fun onResponse(call: Call<List<Reminder>>, response: Response<List<Reminder>>) {
                     if (response.isSuccessful) {
                         _reminders.postValue(response.body())
@@ -42,9 +42,9 @@ class RemindersViewModel : ViewModel() {
         viewModelScope.launch {
             RetrofitClient.instance.addReminder(reminder).enqueue(object : Callback<ReminderResponse> {
                 override fun onResponse(call: Call<ReminderResponse>, response: Response<ReminderResponse>) {
-                    if (response.isSuccessful && response.body()?.success == true) {
+                    if (response.isSuccessful) {
                         _reminderAddResult.postValue(Result.success(true))
-                        fetchReminders(reminder.user_id) // Refresh reminders list
+                        fetchReminders() // Refresh reminders list
                     } else {
                         _reminderAddResult.postValue(Result.failure(Exception("Не удалось создать напоминание")))
                     }
@@ -61,8 +61,8 @@ class RemindersViewModel : ViewModel() {
         viewModelScope.launch {
             RetrofitClient.instance.updateReminder(reminder.reminder_id, reminder).enqueue(object : Callback<ReminderResponse> {
                 override fun onResponse(call: Call<ReminderResponse>, response: Response<ReminderResponse>) {
-                    if (response.isSuccessful && response.body()?.success == true) {
-                        fetchReminders(reminder.user_id)
+                    if (response.isSuccessful) {
+                        fetchReminders()
                     }
                 }
 
@@ -77,8 +77,8 @@ class RemindersViewModel : ViewModel() {
         viewModelScope.launch {
             RetrofitClient.instance.deleteReminder(reminderId).enqueue(object : Callback<ReminderResponse> {
                 override fun onResponse(call: Call<ReminderResponse>, response: Response<ReminderResponse>) {
-                    if (response.isSuccessful && response.body()?.success == true) {
-                        fetchReminders(userId)
+                    if (response.isSuccessful) {
+                        fetchReminders()
                     }
                 }
 

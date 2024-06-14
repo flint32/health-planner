@@ -22,7 +22,7 @@ class RegistrationViewModel : ViewModel() {
             val request = RegisterRequest(name, email, password)
             RetrofitClient.instance.register(request).enqueue(object : Callback<RegisterResponse> {
                 override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                    if (response.isSuccessful && response.body()?.success == true) {
+                    if (response.isSuccessful) {
                         _registrationSuccess.postValue(true)
                     } else {
                         _registrationSuccess.postValue(false)
